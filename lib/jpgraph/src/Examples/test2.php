@@ -12,12 +12,13 @@ function draw_gauge()
     $graph->SetFrame(false);
 
     $odo = new Odometer(ODO_HALF);
-    $odo->scale->Set(0,3);
-    $odo->scale->SetTicks(1,1);
-    $odo->AddIndication(0,1,"green:0.9");
-    $odo->AddIndication(1,1.5,"green:0.7");
-    $odo->AddIndication(1.5,2,"yellow");
-    $odo->AddIndication(2,3,"red");
+    $odo->scale->Set(0,0.6);
+    $odo->scale->SetTicks(0.1);
+    $odo->scale->SetLabelFormat('%.01f');
+    $odo->AddIndication(0,.1,"green:0.9");
+    $odo->AddIndication(.1,.2,"green:0.7");
+    $odo->AddIndication(.2,.4,"yellow");
+    $odo->AddIndication(.4,.6,"red");
     $odo->SetCenterAreaWidth(0.4); //Area around needle
     $odo->SetColor("black");
     $odo->SetBorder("black",1);
