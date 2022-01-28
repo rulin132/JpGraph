@@ -108,7 +108,7 @@ class Image {
             imageantialias($this->img,$aFlg);
         }
         else {
-            //JpGraphError::RaiseL(25128);//('The function imageantialias() is not available in your PHP installation. Use the GD version that comes with PHP and not the standalone version.')
+            JpGraphError::RaiseL(25128);//('The function imageantialias() is not available in your PHP installation. Use the GD version that comes with PHP and not the standalone version.')
         }
     }
 
@@ -718,9 +718,6 @@ class Image {
 
     function imagettfbbox_fixed($size, $angle, $fontfile, $text) {
 
-        if($text === '') {
-            return [-1, 1, 1, 1, 1, -1, -1, -1];
-        }
 
         if( ! USE_LIBRARY_IMAGETTFBBOX ) {
 
@@ -933,12 +930,9 @@ class Image {
                     // This is only support for text at 0 degree !!
                     // Do nothing the text is drawn at baseline by default
                 }
-            }
-            if($txt !== '') {
-                ImageTTFText ($this->img, $this->font_size, $dir, $x, $y,
+            } 
+            ImageTTFText ($this->img, $this->font_size, $dir, $x, $y,
                           $this->current_color,$this->font_file,$txt);
-            }
-            
 
             // Calculate and return the co-ordinates for the bounding box
             $box = $this->imagettfbbox_fixed($this->font_size,$dir,$this->font_file,$txt);
@@ -1044,15 +1038,13 @@ class Image {
                 $xl -= $bbox[0]/2;
                 $yl = $y - $yadj;
                 //$xl = $xl- $xadj;
-                if($tmp[$i] !== '') {
-                    ImageTTFText($this->img, $this->font_size, $dir, $xl, $yl-($h-$fh)+$fh*$i,
+                ImageTTFText($this->img, $this->font_size, $dir, $xl, $yl-($h-$fh)+$fh*$i,
                              $this->current_color,$this->font_file,$tmp[$i]);
-                }            
 
                // echo "xl=$xl,".$tmp[$i]." <br>";
                 if( $debug  ) {
                     // Draw the bounding rectangle around each line
-                    $box = $this->getimagettfbbox_fixed($this->font_size,$dir,$this->font_file,$tmp[$i]);
+                    $box=@ImageTTFBBox($this->font_size,$dir,$this->font_file,$tmp[$i]);
                     $p = array();
                     for($j=0; $j < 4; ++$j) {
                         $p[] = $bbox[$j*2]+$xl;
@@ -2272,7 +2264,7 @@ class ImgStreamCache {
     // image file doesn't exist or exists but is to old
     function GetAndStream($aImage,$aCacheFileName) {
         if( $this->Isvalid($aCacheFileName) ) {
-            $this->StreamImgFile($aImage,$aCacheFileName);
+            return $this->StreamImgFile($aImage,$aCacheFileName);
         }
         else {
             return false;
