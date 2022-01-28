@@ -1,57 +1,31 @@
 <?php // content="text/plain; charset=utf-8"
 require_once ('jpgraph/jpgraph.php');
 require_once ('jpgraph/jpgraph_line.php');
-require_once ('jpgraph/jpgraph_date.php');
+//require_once ('jpgraph/jpgraph_regstat.php');
 
-// The callback that converts timestamp to minutes and seconds
-function TimeCallback($aVal) {
-    return Date('H:i:s',$aVal);
-}
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
-// Fake some suitable random data
-$now = time();
-$datax = array($now);
-for($i = 0; $i < 1; $i += 0.1) {
-    $datax[] = $now + $i;
-}
-$n = count($datax);
-$datay=array();
-for( $i=0; $i < $n; ++$i ) {
-    $datay[] = rand(30,150);
-}
+$graph = new Graph(1168,170);
+$graph->SetMargin(60,20,20,50);
+$graph->SetScale('textlin');
 
-// Setup the basic graph
-$graph = new Graph(324,250);
-$graph->SetMargin(40,40,30,70);
-$graph->title->Set('Date: '.date('Y-m-d',$now));
-$graph->SetAlphaBlending();
+$ydata = array(0=> 95.5, 1 => 94.32);
 
-// Setup a manual x-scale (We leave the sentinels for the
-// Y-axis at 0 which will then autoscale the Y-axis.)
-// We could also use autoscaling for the x-axis but then it
-// probably will start a little bit earlier than the first value
-// to make the first value an even number as it sees the timestamp
-// as an normal integer value.
-//$graph->SetScale("intlin",0,200,$now,$datax[$n-1]);
-$graph->SetScale('datlin',0,200,$now,$datax[$n-1]);
+$line = new LinePlot($ydata);
+$graph->Add($line);
 
-// Setup the x-axis with a format callback to convert the timestamp
-// to a user readable time
-$graph->xaxis->SetLabelFormatCallback('TimeCallback');
-$graph->xaxis->SetLabelAngle(90);
+$graph->yaxis->HideLine(false);
+$graph->yaxis->HideTicks(false,false);
+$graph->xaxis->HideTicks(false,false);
+$graph->xaxis->SetTextTickInterval(5,4);
+$line->SetLegend('Yield % By Distillation');
 
-// Create the line
-$p1 = new LinePlot($datay,$datax);
-$p1->SetColor("blue");
+$graph->yaxis->title->Set('Yield %');
+$graph->yaxis->SetTitleMargin(40);
+$graph->xgrid->Show();
+$graph->xgrid->SetLineStyle("solid");
 
-// Set the fill color partly transparent
-$p1->SetFillColor("blue@0.4");
-
-// Add lineplot to the graph
-$graph->Add($p1);
-
-// Output line
 $graph->Stroke();
+
 ?>
-
-
