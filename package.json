@@ -1,0 +1,19 @@
+{
+  "name": "@rulin132/jpgraph",
+  "version": "4.3.5",
+  "description": "jpGraph, library to make graphs and charts (PHP). Distribution of upstream JpGraph 4.3.5.",
+  "keywords": ["graph", "chart", "pie", "jpgraph", "data", "php"],
+  "homepage": "http://jpgraph.net/",
+  "license": "QPL-1.0",
+  "author": "JpGraph team",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rulin132/JpGraph.git"
+  },
+  "files": [
+    "lib/JpGraph.php",
+    "lib/jpgraph/src/",
+    "lib/jpgraph/VERSION",
+    "composer.json"
+  ]
+}
