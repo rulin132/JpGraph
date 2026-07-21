@@ -1,0 +1,5 @@
+# Keep the Composer dist tarball lean by excluding docs and dev tooling.
+# Packagist / `composer install --prefer-dist` honors export-ignore.
+lib/jpgraph/docs/ export-ignore
+.github/          export-ignore
+.gitattributes    export-ignore

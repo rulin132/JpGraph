@@ -5,7 +5,7 @@ require_once ('jpgraph/jpgraph_bar.php');
 // Some data
 $months=$gDateLocale->GetShortMonth();
 
-srand ((double) microtime() * 1000000);
+srand ((float) microtime() * 1000000);
 for( $i=0; $i<25; ++$i) {
 	$databary[]=rand(1,50);
 	$databarx[]=$months[$i%12];

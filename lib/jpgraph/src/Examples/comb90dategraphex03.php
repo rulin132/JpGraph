@@ -26,7 +26,7 @@ for( $i=0; $i < NDATAPOINTS-1; ++$i ) {
     if($data_windspeed[$i+1] < 0 )
         $data_windspeed[$i+1] = 0;
 
-    $data_windtemp[$i+1] = $data_windtemp[$i] + rand(-1.5,1.5);
+    $data_windtemp[$i+1] = $data_windtemp[$i] + mt_rand(-150, 150) / 100;
 
     $xdata[$i] = $start + $i * SAMPLERATE;
 }

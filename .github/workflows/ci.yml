@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [ 4.x ]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3']
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: gd
+          coverage: none
+
+      - name: Lint PHP sources
+        run: find lib -name '*.php' -print0 | xargs -0 -n1 -P4 php -l
+
+      - name: Smoke render a chart
+        run: php .github/smoke/render.php
