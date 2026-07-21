@@ -260,13 +260,20 @@ class LanguageConv {
     }
 
     // PHP 9 removes utf8_encode(); encode an ISO-8859-1 (Latin-1) string as
-    // UTF-8 via mbstring/iconv, with a manual fallback.
+    // UTF-8 via mbstring/iconv, falling back to a manual encoder if neither is
+    // available or the conversion fails (they return false on error).
     private static function utf8_encode_compat($aData) {
         if( function_exists('mb_convert_encoding') ) {
-            return mb_convert_encoding($aData, 'UTF-8', 'ISO-8859-1');
+            $r = mb_convert_encoding($aData, 'UTF-8', 'ISO-8859-1');
+            if( $r !== false ) {
+                return $r;
+            }
         }
         if( function_exists('iconv') ) {
-            return iconv('ISO-8859-1', 'UTF-8', $aData);
+            $r = iconv('ISO-8859-1', 'UTF-8', $aData);
+            if( $r !== false ) {
+                return $r;
+            }
         }
         $o = '';
         for( $i = 0, $n = strlen($aData); $i < $n; ++$i ) {
@@ -278,16 +285,24 @@ class LanguageConv {
 
     // PHP 8.0 removes convert_cyr_string(); convert between Cyrillic charsets
     // (single-letter codes as used by the old function) via mbstring/iconv.
+    // If neither is available or the conversion fails (they return false),
+    // return the text unchanged rather than a non-string.
     private static function cyr_convert($aTxt, $aFrom, $aTo) {
         $map = array('w'=>'Windows-1251', 'k'=>'KOI8-R', 'i'=>'ISO-8859-5',
                      'a'=>'CP866', 'd'=>'CP866', 'm'=>'x-mac-cyrillic');
         $from = isset($map[$aFrom]) ? $map[$aFrom] : 'Windows-1251';
         $to   = isset($map[$aTo])   ? $map[$aTo]   : 'ISO-8859-5';
         if( function_exists('mb_convert_encoding') ) {
-            return mb_convert_encoding($aTxt, $to, $from);
+            $r = mb_convert_encoding($aTxt, $to, $from);
+            if( $r !== false ) {
+                return $r;
+            }
         }
         if( function_exists('iconv') ) {
-            return iconv($from, $to, $aTxt);
+            $r = iconv($from, $to, $aTxt);
+            if( $r !== false ) {
+                return $r;
+            }
         }
         return $aTxt;
     }

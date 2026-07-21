@@ -109,7 +109,7 @@ class LayoutRect {
         $img = $aGraph->img;
         $th  = 0;
         if( method_exists($aGraph->title, 'GetTextHeight') ) {
-            $th = (float) @$aGraph->title->GetTextHeight($img);
+            $th = (float) $aGraph->title->GetTextHeight($img);
         }
         if( $th <= 0 ) {
             $th = 20; // conservative default when the height can't be measured
