@@ -169,10 +169,10 @@ class LanguageConv {
             return $unistring;
         } elseif( LANGUAGE_CYRILLIC ) {
             if( CYRILLIC_FROM_WINDOWS && (!defined('LANGUAGE_CHARSET') || stristr(LANGUAGE_CHARSET, 'windows-1251')) ) {
-                $aTxt = convert_cyr_string($aTxt, "w", "k");
+                $aTxt = LanguageConv::cyr_convert($aTxt, "w", "k");
             }
             if( !defined('LANGUAGE_CHARSET') || stristr(LANGUAGE_CHARSET, 'koi8-r') || stristr(LANGUAGE_CHARSET, 'windows-1251')) {
-                $isostring = convert_cyr_string($aTxt, "k", "i");
+                $isostring = LanguageConv::cyr_convert($aTxt, "k", "i");
                 $unistring = LanguageConv::iso2uni($isostring);
             }
             else {
@@ -256,7 +256,40 @@ class LanguageConv {
             $c=ord( substr($isoline,$i,1) );
             $o .= ($c > 223) && ($c < 251) ? '&#'.(1264+$c).';' : chr($c);
         }
-        return utf8_encode($o);
+        return LanguageConv::utf8_encode_compat($o);
+    }
+
+    // PHP 9 removes utf8_encode(); encode an ISO-8859-1 (Latin-1) string as
+    // UTF-8 via mbstring/iconv, with a manual fallback.
+    private static function utf8_encode_compat($aData) {
+        if( function_exists('mb_convert_encoding') ) {
+            return mb_convert_encoding($aData, 'UTF-8', 'ISO-8859-1');
+        }
+        if( function_exists('iconv') ) {
+            return iconv('ISO-8859-1', 'UTF-8', $aData);
+        }
+        $o = '';
+        for( $i = 0, $n = strlen($aData); $i < $n; ++$i ) {
+            $c = ord($aData[$i]);
+            $o .= $c < 0x80 ? chr($c) : chr(0xC0 | ($c >> 6)) . chr(0x80 | ($c & 0x3F));
+        }
+        return $o;
+    }
+
+    // PHP 8.0 removes convert_cyr_string(); convert between Cyrillic charsets
+    // (single-letter codes as used by the old function) via mbstring/iconv.
+    private static function cyr_convert($aTxt, $aFrom, $aTo) {
+        $map = array('w'=>'Windows-1251', 'k'=>'KOI8-R', 'i'=>'ISO-8859-5',
+                     'a'=>'CP866', 'd'=>'CP866', 'm'=>'x-mac-cyrillic');
+        $from = isset($map[$aFrom]) ? $map[$aFrom] : 'Windows-1251';
+        $to   = isset($map[$aTo])   ? $map[$aTo]   : 'ISO-8859-5';
+        if( function_exists('mb_convert_encoding') ) {
+            return mb_convert_encoding($aTxt, $to, $from);
+        }
+        if( function_exists('iconv') ) {
+            return iconv($from, $to, $aTxt);
+        }
+        return $aTxt;
     }
 }
 
