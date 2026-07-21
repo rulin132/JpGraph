@@ -19,7 +19,7 @@ require_once('jpgraph_theme.inc.php');
 require_once('gd_image.inc.php');
 
 // Version info
-define('JPG_VERSION','4.3.5');
+define('JPG_VERSION','4.4.3');
 
 // Minimum required PHP version
 define('MIN_PHPVERSION','5.1.0');
@@ -392,15 +392,15 @@ class DateLocale {
         }
 
         $this->iLocale = $aLocale;
-        for( $i = 0, $ofs = 0 - strftime('%w'); $i < 7; $i++, $ofs++ ) {
-            $day = strftime('%a', strtotime("$ofs day"));
+        for( $i = 0, $ofs = 0 - date('w'); $i < 7; $i++, $ofs++ ) {
+            $day = date('D', strtotime("$ofs day"));
             $day[0] = strtoupper($day[0]);
             $this->iDayAbb[$aLocale][]= $day[0];
             $this->iShortDay[$aLocale][]= $day;
         }
 
         for($i=1; $i<=12; ++$i) {
-            list($short ,$full) = explode('|', strftime("%b|%B",strtotime("2001-$i-01")));
+            list($short ,$full) = explode('|', date("M|F",strtotime("2001-$i-01")));
             $this->iShortMonth[$aLocale][] = ucfirst($short);
             $this->iMonthName [$aLocale][] = ucfirst($full);
         }
@@ -493,7 +493,7 @@ class Footer {
 // CLASS Graph
 // Description: Main class to handle graphs
 //===================================================
-class Graph {
+class Graph extends stdClass {
     public $cache=null;   // Cache object (singleton)
     public $img=null;   // Img object (singleton)
     public $plots=array();  // Array of all plot object in the graph (for Y 1 axis)
@@ -1400,7 +1400,7 @@ class Graph {
     function StrokeCSIM($aScriptName='auto',$aCSIMName='',$aBorder=0) {
         if( $aCSIMName=='' ) {
             // create a random map name
-            srand ((double) microtime() * 1000000);
+            srand ((float) microtime() * 1000000);
             $r = rand(0,100000);
             $aCSIMName='__mapname'.$r.'__';
         }
@@ -4059,7 +4059,7 @@ class Axis extends AxisPrototype {
                 // that holds the labels set by the user. If the user hasn't
                 // specified any values we use whats in the automatically asigned
                 // labels in the maj_ticks_label
-                if( isset($this->ticks_label[$i*$m]) ) {
+                if( isset($this->ticks_label[$i *(int)$m]) ) {
                     $label=$this->ticks_label[$i*$m];
                 }
                 else {
@@ -4159,7 +4159,7 @@ class Axis extends AxisPrototype {
 // Description: Abstract base class for drawing linear and logarithmic
 // tick marks on axis
 //===================================================
-class Ticks {
+class Ticks extends stdClass {
     public $label_formatstr='';   // C-style format string to use for labels
     public $label_formfunc='';
     public $label_dateformatstr='';
@@ -5371,7 +5371,7 @@ class DisplayValue {
 // CLASS Plot
 // Description: Abstract base class for all concrete plot classes
 //===================================================
-class Plot {
+class Plot extends stdClass {
     public $numpoints=0;
     public $value;
     public $legend='';
