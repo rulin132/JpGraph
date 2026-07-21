@@ -1050,7 +1050,7 @@ class Image {
                // echo "xl=$xl,".$tmp[$i]." <br>";
                 if( $debug  ) {
                     // Draw the bounding rectangle around each line
-                    $box = $this->getimagettfbbox_fixed($this->font_size,$dir,$this->font_file,$tmp[$i]);
+                    $box = $this->imagettfbbox_fixed($this->font_size,$dir,$this->font_file,$tmp[$i]);
                     $p = array();
                     for($j=0; $j < 4; ++$j) {
                         $p[] = $bbox[$j*2]+$xl;
