@@ -49,8 +49,8 @@ class WindrosePlotScale extends stdClass {
     private $iNumCirc=3;
     public $iMaxNum=0;
     private $iLblFmt='%.0f%%';
-    public $iFontFamily=FF_VERDANA,$iFontStyle=FS_NORMAL,$iFontSize=10;
-    public $iZFontFamily=FF_ARIAL,$iZFontStyle=FS_NORMAL,$iZFontSize=10;
+    public $iFontFamily=FF_DV_SANSSERIF,$iFontStyle=FS_NORMAL,$iFontSize=10;
+    public $iZFontFamily=FF_DV_SANSSERIF,$iZFontStyle=FS_NORMAL,$iZFontSize=10;
     public $iFontColor='black',$iZFontColor='black';
     private $iFontFrameColor=false, $iFontBkgColor=false;
     private $iLblZeroTxt=null;
@@ -275,9 +275,9 @@ class WindrosePlotScale extends stdClass {
 class LegendStyle {
     public $iLength = 40, $iMargin = 20 , $iBottomMargin=5;
     public $iCircleWeight=2,  $iCircleRadius = 18, $iCircleColor='black';
-    public $iTxtFontFamily=FF_VERDANA,$iTxtFontStyle=FS_NORMAL,$iTxtFontSize=8;
-    public $iLblFontFamily=FF_VERDANA,$iLblFontStyle=FS_NORMAL,$iLblFontSize=8;
-    public $iCircleFontFamily=FF_VERDANA,$iCircleFontStyle=FS_NORMAL,$iCircleFontSize=8;
+    public $iTxtFontFamily=FF_DV_SANSSERIF,$iTxtFontStyle=FS_NORMAL,$iTxtFontSize=8;
+    public $iLblFontFamily=FF_DV_SANSSERIF,$iLblFontStyle=FS_NORMAL,$iLblFontSize=8;
+    public $iCircleFontFamily=FF_DV_SANSSERIF,$iCircleFontStyle=FS_NORMAL,$iCircleFontSize=8;
     public $iLblFontColor='black',$iTxtFontColor='black',$iCircleFontColor='black';
     public $iShow=true;
     public $iFormatString='%.1f';
@@ -395,7 +395,7 @@ class WindrosePlot extends stdClass {
     private $iRangeStyle = RANGE_OVERLAPPING ;
     public $iCenterSize=60;
     private $iType = WINDROSE_TYPE16;
-    public $iFontFamily=FF_VERDANA,$iFontStyle=FS_NORMAL,$iFontSize=10;
+    public $iFontFamily=FF_DV_SANSSERIF,$iFontStyle=FS_NORMAL,$iFontSize=10;
     public $iFontColor='darkgray';
     private $iRadialGridStyle='longdashed';
     private $iAllDirectionLabels =  array('E','ENE','NE','NNE','N','NNW','NW','WNW','W','WSW','SW','SSW','S','SSE','SE','ESE');
@@ -1453,11 +1453,11 @@ class WindroseGraph extends Graph {
         $this->posx=$width/2;
         $this->posy=$height/2;
         $this->SetColor('white');
-        $this->title->SetFont(FF_VERDANA,FS_NORMAL,12);
+        $this->title->SetFont(FF_DV_SANSSERIF,FS_NORMAL,12);
         $this->title->SetMargin(8);
-        $this->subtitle->SetFont(FF_VERDANA,FS_NORMAL,10);
+        $this->subtitle->SetFont(FF_DV_SANSSERIF,FS_NORMAL,10);
         $this->subtitle->SetMargin(0);
-        $this->subsubtitle->SetFont(FF_VERDANA,FS_NORMAL,8);
+        $this->subsubtitle->SetFont(FF_DV_SANSSERIF,FS_NORMAL,8);
         $this->subsubtitle->SetMargin(0);
     }
 
