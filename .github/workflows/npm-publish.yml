@@ -1,0 +1,45 @@
+name: Publish to npm
+
+# Publishes this package to npm.
+#
+# Triggers:
+#   - When a GitHub Release is published (recommended path).
+#   - Manually from the Actions tab (workflow_dispatch).
+#
+# One-time setup:
+#   Add an npm automation token as a repository secret named NPM_TOKEN
+#   (Settings > Secrets and variables > Actions > New repository secret).
+#
+# Release flow:
+#   1. Bump "version" in package.json (npm will not republish an existing version).
+#   2. Commit and push to the default branch.
+#   3. Create a GitHub Release (e.g. tag v4.4.3).
+#   -> this workflow runs and publishes that version to npm.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # To enable npm provenance attestations (public repos only), add:
+    #   permissions:
+    #     id-token: write
+    # and change the publish command below to:
+    #   npm publish --provenance --access public
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Publish to npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
